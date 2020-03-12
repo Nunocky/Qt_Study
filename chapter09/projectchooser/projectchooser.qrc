@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>images/leftarrow.png</file>
+    <file>images/person.png</file>
+    <file>images/rightarrow.png</file>
+</qresource>
+</RCC>
