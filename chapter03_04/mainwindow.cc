@@ -135,7 +135,7 @@ MainWindow::sort()
                         'A' + range.rightColumn());
 
   if (dialog.exec()) {
-    SpreadSheetCompare compare;
+    SpreadsheetCompare compare;
     compare.keys[0] = dialog.primaryColumnCombo->currentIndex();
     compare.keys[1] = dialog.secondaryColumnCombo->currentIndex() - 1;
     compare.keys[2] = dialog.tertiaryColumnCombo->currentIndex() - 1;

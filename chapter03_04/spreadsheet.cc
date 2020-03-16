@@ -11,14 +11,10 @@ SpreadSheet::SpreadSheet(QWidget *parent)
   setItemPrototype(new Cell);
   setSelectionMode(ContiguousSelection);
 
-  connect(this, SIGNAL(itemChanged(QTableWidgetItem*)), 
-          this, SLOT(somethingChanged()));
+  connect(this, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(somethingChanged()));
 
   clear();
 }
-
-//bool
-//SpreadSheet::autoRecalculate() const {return autoRecalc;}
 
 QString
 SpreadSheet::currentLocation() const
@@ -88,7 +84,6 @@ SpreadSheet::readFile(const QString &fileName)
   }
 
   clear();
-
   quint16 row;
   quint16 column;
   QString str;
@@ -98,7 +93,6 @@ SpreadSheet::readFile(const QString &fileName)
     in >> row >> column >> str;
     setFormula(row, column, str);
   }
-
   QApplication::restoreOverrideCursor();
   return true;  
 }
@@ -136,7 +130,7 @@ SpreadSheet::writeFile(const QString &fileName)
 
 
 void
-SpreadSheet::sort(const SpreadSheetCompare &compare)
+SpreadSheet::sort(const SpreadsheetCompare &compare)
 {
   QList<QStringList> rows;
   QTableWidgetSelectionRange range = selectedRange();
@@ -169,7 +163,6 @@ SpreadSheet::cut()
   copy();
   del();
 }
-
 
 void
 SpreadSheet::copy()
@@ -243,13 +236,11 @@ SpreadSheet::selectCurrentRow()
   selectRow(currentRow());
 }
 
-
 void
 SpreadSheet::selectCurrentColumn()
 {
   selectColumn(currentColumn());
 }
-
 
 void
 SpreadSheet::recalculate()
@@ -264,7 +255,6 @@ SpreadSheet::recalculate()
   viewport()->update();
 }
 
-
 void
 SpreadSheet::setAutoRecalculate(bool recalc)
 {
@@ -273,7 +263,6 @@ SpreadSheet::setAutoRecalculate(bool recalc)
     recalculate();
   }
 }
-
 
 void
 SpreadSheet::findNext(const QString &str, Qt::CaseSensitivity cs)
@@ -297,7 +286,6 @@ SpreadSheet::findNext(const QString &str, Qt::CaseSensitivity cs)
   QApplication::beep();
 }
 
-
 void
 SpreadSheet::findPrev(const QString &str, Qt::CaseSensitivity cs)
 {
@@ -320,24 +308,21 @@ SpreadSheet::findPrev(const QString &str, Qt::CaseSensitivity cs)
   QApplication::beep();
 }
 
-
 void
 SpreadSheet::somethingChanged()
 {
   if (autoRecalc) {
     recalculate();
   }
-  emit modified();
-  
-}
 
+  emit modified();
+}
 
 Cell*
 SpreadSheet::cell(int row, int column) const
 {
   return static_cast<Cell*>(item(row, column));
 }
-
 
 QString
 SpreadSheet::text(int row, int column) const
@@ -351,7 +336,6 @@ SpreadSheet::text(int row, int column) const
   }
 }
 
-
 QString
 SpreadSheet::formula(int row, int column) const
 {
@@ -363,7 +347,6 @@ SpreadSheet::formula(int row, int column) const
     return "";
   }
 }
-
 
 void
 SpreadSheet::setFormula(int row, int column, const QString &formula)
@@ -381,7 +364,7 @@ SpreadSheet::setFormula(int row, int column, const QString &formula)
 //--------------------------------------------------------------------------------
 
 bool
-SpreadSheetCompare::operator() (const QStringList &row1,
+SpreadsheetCompare::operator() (const QStringList &row1,
                                 const QStringList &row2) const
 {
   for(int i=0; i<KeyCount; ++i) {

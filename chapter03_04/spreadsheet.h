@@ -4,7 +4,7 @@
 #include <QTableWidget>
 
 class Cell;
-class SpreadSheetCompare;
+class SpreadsheetCompare;
 
 class SpreadSheet : public QTableWidget
 {
@@ -20,7 +20,7 @@ public:
   void clear();
   bool readFile(const QString &fileName);
   bool writeFile(const QString &fileName);
-  void sort(const SpreadSheetCompare &compare);
+  void sort(const SpreadsheetCompare &compare);
 
 public slots:
   void cut();
@@ -50,7 +50,7 @@ private:
   bool autoRecalc;
 };
 
-class SpreadSheetCompare
+class SpreadsheetCompare
 {
 public:
   bool operator() (const QStringList &row1,

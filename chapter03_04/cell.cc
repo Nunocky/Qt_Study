@@ -64,8 +64,8 @@ Cell::setDirty()
   cacheIsDirty = true;
 }
 
-
 const QVariant Invalid;
+
 QVariant
 Cell::value() const
 {
@@ -87,15 +87,15 @@ Cell::value() const
       if (expr[pos] != QChar::Null) {
         cachedValue = Invalid;
       }
+    }
+    else {
+      bool ok;
+      double d = formulaStr.toDouble(&ok);
+      if (ok) {
+        cachedValue = d;
+      }
       else {
-        bool ok;
-        double d = formulaStr.toDouble(&ok);
-        if (ok) {
-          cachedValue = d;
-        }
-        else {
-          cachedValue = formulaStr;
-        }
+        cachedValue = formulaStr;
       }
     }
   }
@@ -210,4 +210,3 @@ Cell::evalFactor(const QString &str, int &pos) const
   }
   return result;
 }
-
