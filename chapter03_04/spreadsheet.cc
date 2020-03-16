@@ -352,7 +352,7 @@ void
 SpreadSheet::setFormula(int row, int column, const QString &formula)
 {
   Cell *c = cell(row, column);
-  if (c) {
+  if (!c) {
     c = new Cell;
     setItem(row, column, c);
   }
