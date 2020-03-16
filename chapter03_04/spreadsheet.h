@@ -13,14 +13,14 @@ class SpreadSheet : public QTableWidget
 public:
   SpreadSheet(QWidget *parent=0);
 
-  bool autoRecalclate() const {return autoRecalc;}
+  bool autoRecalculate() const {return autoRecalc;}
   QString currentLocation() const;
   QString currentFormula() const;
   QTableWidgetSelectionRange selectedRange() const;
   void clear();
   bool readFile(const QString &fileName);
   bool writeFile(const QString &fileName);
-  void sort(const SpreadsheetCompare &compare);
+  void sort(const SpreadSheetCompare &compare);
 
 public slots:
   void cut();
@@ -50,7 +50,7 @@ private:
   bool autoRecalc;
 };
 
-class SpreadsheetCompare
+class SpreadSheetCompare
 {
 public:
   bool operator() (const QStringList &row1,

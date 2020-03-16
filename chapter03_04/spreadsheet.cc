@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QtWidgets>
 #include "cell.h"
 #include "spreadsheet.h"
 
@@ -16,8 +17,8 @@ SpreadSheet::SpreadSheet(QWidget *parent)
   clear();
 }
 
-bool
-SpreadSheet::autoRecalclate() const {return autoRecalc;}
+//bool
+//SpreadSheet::autoRecalculate() const {return autoRecalc;}
 
 QString
 SpreadSheet::currentLocation() const
@@ -38,7 +39,7 @@ SpreadSheet::selectedRange() const
 {
   QList<QTableWidgetSelectionRange> ranges = selectedRanges();
   if (ranges.isEmpty()) {
-    return QTableWidgetSelectionRange()
+    return QTableWidgetSelectionRange();
   }
 
   return ranges.first();
@@ -75,9 +76,9 @@ SpreadSheet::readFile(const QString &fileName)
   }
 
   QDataStream in(&file);
-  in.setVersion(QDataStream:Qt_4_1);
+  in.setVersion(QDataStream::Qt_4_1);
 
-  guint32 magic;
+  quint32 magic;
   in >> magic;
   if (magic != MagicNumber) {
     QMessageBox::warning(this,
@@ -115,7 +116,7 @@ SpreadSheet::writeFile(const QString &fileName)
   }
 
   QDataStream out(&file);
-  out.setVersion(QDataStream:Qt_4_1);
+  out.setVersion(QDataStream::Qt_4_1);
 
   out << quint32(MagicNumber);
 
@@ -135,7 +136,7 @@ SpreadSheet::writeFile(const QString &fileName)
 
 
 void
-SpreadSheet::sort(const SpreadsheetCompare &compare)
+SpreadSheet::sort(const SpreadSheetCompare &compare)
 {
   QList<QStringList> rows;
   QTableWidgetSelectionRange range = selectedRange();
@@ -246,7 +247,7 @@ SpreadSheet::selectCurrentRow()
 void
 SpreadSheet::selectCurrentColumn()
 {
-  setColumn(currentColumn());
+  selectColumn(currentColumn());
 }
 
 
@@ -260,7 +261,7 @@ SpreadSheet::recalculate()
       }
     }
   }
-  viewport->update();
+  viewport()->update();
 }
 
 
@@ -285,7 +286,7 @@ SpreadSheet::findNext(const QString &str, Qt::CaseSensitivity cs)
       if (text(row, column).contains(str, cs)) {
         clearSelection();
         setCurrentCell(row, column);
-        acrivateWindow();
+        activateWindow();
         return;
       }
       ++column;
@@ -308,7 +309,7 @@ SpreadSheet::findPrev(const QString &str, Qt::CaseSensitivity cs)
       if (text(row, column).contains(str, cs)) {
         clearSelection();
         setCurrentCell(row, column);
-        acrivateWindow();
+        activateWindow();
         return;
       }
       --column;
@@ -380,7 +381,7 @@ SpreadSheet::setFormula(int row, int column, const QString &formula)
 //--------------------------------------------------------------------------------
 
 bool
-SpreadsheetCompare::operator() (const QStringList &row1,
+SpreadSheetCompare::operator() (const QStringList &row1,
                                 const QStringList &row2) const
 {
   for(int i=0; i<KeyCount; ++i) {

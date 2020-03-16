@@ -31,7 +31,7 @@ private slots:
   void updateCellIndicators();
   void openRecentFile();
   void updateStatusBar();
-  void spreadsheetModified();
+  void spreadSheetModified();
 
 private:
   void createActions();
@@ -43,7 +43,7 @@ private:
   void writeSettings();
   bool okToContinue();
   bool loadFile(const QString &fileName);
-  void saveFile(const QString &fileName);
+  bool saveFile(const QString &fileName);
   void setCurrentFile(const QString &fileName);
   void updateRecentFileActions();
   QString strippedName(const QString &fullFileName);

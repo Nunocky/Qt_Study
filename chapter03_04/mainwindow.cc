@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QtWidgets>
 
 #include "finddialog.h"
 #include "gotocelldialog.h"
@@ -8,8 +9,8 @@
 
 MainWindow::MainWindow()
 {
-  spreadsheet = new SpreadSheet;
-  setCentralWidget(spreadsheet);
+  spreadSheet = new SpreadSheet;
+  setCentralWidget(spreadSheet);
 
   //setAttribute(Qt::WA_DeleteOnClose);
 
@@ -22,9 +23,8 @@ MainWindow::MainWindow()
   readSettings();
   findDialog = 0;
 
-  setWindowIcon(QICON(":images/icon.png"));
+  setWindowIcon(QIcon(":images/icon.png"));
   setCurrentFile("");
-
 }
 
 
@@ -49,8 +49,8 @@ MainWindow::newFile()
 //  MainWindow *mainWin = new MainWindow;
 //  mainWin->show();
 
-  if (maybeSave()) {
-    spreadsheet->clear();
+  if (okToContinue()) {
+    spreadSheet->clear();
     setCurrentFile("");
   }
 }
@@ -61,9 +61,9 @@ MainWindow::open()
 {
   if (okToContinue()) {
     QString fileName = QFileDialog::getOpenFileName(this,
-                                                    tr("Open Spreadsheet"),
+                                                    tr("Open SpreadSheet"),
                                                     ".",
-                                                    tr("Spreadsheet files (*.sp)"));
+                                                    tr("SpreadSheet files (*.sp)"));
     if (!fileName.isEmpty()) {
       loadFile(fileName);
     }
@@ -87,9 +87,9 @@ bool
 MainWindow::saveAs()
 {
   QString fileName = QFileDialog::getSaveFileName(this,
-                                                  tr("Save Spreadsheet"),
+                                                  tr("Save SpreadSheet"),
                                                   ".",
-                                                  tr("Spreadsheet files (*.sp)"));
+                                                  tr("SpreadSheet files (*.sp)"));
 
   if (fileName.isEmpty()) {
     return false;
@@ -105,8 +105,8 @@ MainWindow::find()
   if(!findDialog) {
     findDialog = new FindDialog(this);
 
-    connect(findDialog, SIGNAL(findNext(const QString&, Qt::CaseSensitivity)), spreadsheet, SLOT(findNext(const QString&, Qt::CaseSensitivity)));
-    connect(findDialog, SIGNAL(findPrev(const QString&, Qt::CaseSensitivity)), spreadsheet, SLOT(findPrev(const QString&, Qt::CaseSensitivity)));
+    connect(findDialog, SIGNAL(findNext(const QString&, Qt::CaseSensitivity)), spreadSheet, SLOT(findNext(const QString&, Qt::CaseSensitivity)));
+    connect(findDialog, SIGNAL(findPrev(const QString&, Qt::CaseSensitivity)), spreadSheet, SLOT(findPrev(const QString&, Qt::CaseSensitivity)));
   }
 
   findDialog->show();
@@ -152,10 +152,10 @@ void
 MainWindow::about()
 {
     QMessageBox::about(this, 
-                       tr("About Spreadsheet"),
-                       tr("<h2>Spreadsheet 1.1</h2>"
+                       tr("About SpreadSheet"),
+                       tr("<h2>SpreadSheet 1.1</h2>"
                           "<p>Copyright &copy; 2006 Software Inc."
-                          "<p>Spreadsheet is a small application that "
+                          "<p>SpreadSheet is a small application that "
                           "demonstrates QAction, QMainWindow, QMenuBar, "
                           "QStatusBar, QTableWidget, QToolBar, and many other "
                           "Qt classes."));
@@ -185,7 +185,7 @@ MainWindow::updateStatusBar()
 
 
 void
-MainWindow::spreadsheetModified()
+MainWindow::spreadSheetModified()
 {
   setWindowModified(true);
   updateStatusBar();
@@ -198,26 +198,25 @@ MainWindow::createActions()
   newAction = new QAction(tr("&New"), this);
   newAction->setIcon(QIcon(":/images/new.png"));
   newAction->setShortcut(tr("Ctrl+N"));
-  newAction->setStatusTip(tr("Create a new spreadsheet file"));
-  connect(newAction, SIGNAL(triggered), this, SLOT(newFile()));
+  newAction->setStatusTip(tr("Create a new spreadSheet file"));
+  connect(newAction, SIGNAL(triggered()), this, SLOT(newFile()));
 
   openAction = new QAction(tr("&Open..."), this);
   openAction->setIcon(QIcon(":/images/open.png"));
   openAction->setShortcut(tr("Ctrl+O"));
-  openAction->setStatusTip(tr("Open an existing spreadsheet file"));
+  openAction->setStatusTip(tr("Open an existing spreadSheet file"));
   connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
 
   saveAction = new QAction(tr("&Save"), this);
   saveAction->setIcon(QIcon(":/images/save.png"));
   saveAction->setShortcut(tr("Ctrl+S"));
-  saveAction->setStatusTip(tr("Save the spreadsheet to disk"));
+  saveAction->setStatusTip(tr("Save the spreadSheet to disk"));
   connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
   saveAsAction = new QAction(tr("Save &As..."), this);
-  saveAsAction->setStatusTip(tr("Save the spreadsheet under a new name"));
+  saveAsAction->setStatusTip(tr("Save the spreadSheet under a new name"));
   connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
-
-
+  
   for(int i=0; i< MaxRecentFiles; ++i) {
     recentFileActions[i] = new QAction(this);
     recentFileActions[i]->setVisible(false);
@@ -240,14 +239,14 @@ MainWindow::createActions()
   cutAction->setShortcut(tr("Ctrl+X"));
   cutAction->setStatusTip(tr("Cut the current selection's contents "
                              "to the clipboard"));
-  connect(cutAction, SIGNAL(triggered()), spreadsheet, SLOT(cut()));
+  connect(cutAction, SIGNAL(triggered()), spreadSheet, SLOT(cut()));
 
   copyAction = new QAction(tr("&Copy"), this);
   copyAction->setIcon(QIcon(":/images/copy.png"));
   copyAction->setShortcut(tr("Ctrl+C"));
   copyAction->setStatusTip(tr("Copy the current selection's contents "
                               "to the clipboard"));
-  connect(copyAction, SIGNAL(triggered()), spreadsheet, SLOT(copy()));
+  connect(copyAction, SIGNAL(triggered()), spreadSheet, SLOT(copy()));
 
   pasteAction = new QAction(tr("&Paste"), this);
   pasteAction->setIcon(QIcon(":/images/paste.png"));
@@ -255,33 +254,31 @@ MainWindow::createActions()
   pasteAction->setStatusTip(tr("Paste the clipboard's contents into "
                                "the current selection"));
   connect(pasteAction, SIGNAL(triggered()),
-          spreadsheet, SLOT(paste()));
+          spreadSheet, SLOT(paste()));
 
   deleteAction = new QAction(tr("&Delete"), this);
   deleteAction->setShortcut(tr("Del"));
   deleteAction->setStatusTip(tr("Delete the current selection's "
                                 "contents"));
   connect(deleteAction, SIGNAL(triggered()),
-          spreadsheet, SLOT(del()));
+          spreadSheet, SLOT(del()));
 
   selectRowAction = new QAction(tr("&Row"), this);
   selectRowAction->setStatusTip(tr("Select all the cells in the "
                                    "current row"));
   connect(selectRowAction, SIGNAL(triggered()),
-          spreadsheet, SLOT(selectCurrentRow()));
+          spreadSheet, SLOT(selectCurrentRow()));
 
   selectColumnAction = new QAction(tr("&Column"), this);
   selectColumnAction->setStatusTip(tr("Select all the cells in the current column"));
                                       
   connect(selectColumnAction, SIGNAL(triggered()),
-          spreadsheet, SLOT(selectCurrentColumn()));
+          spreadSheet, SLOT(selectCurrentColumn()));
 
   selectAllAction = new QAction(tr("&All"), this);
   selectAllAction->setShortcut(tr("Ctrl+A"));
-  selectAllAction->setStatusTip(tr("Select all the cells in the spreadsheet"));
-                                   
-  connect(selectAllAction, SIGNAL(triggered()),
-          spreadsheet, SLOT(selectAll()));
+  selectAllAction->setStatusTip(tr("Select all the cells in the spreadSheet"));
+  connect(selectAllAction, SIGNAL(triggered()), spreadSheet, SLOT(selectAll()));
 
   findAction = new QAction(tr("&Find..."), this);
   findAction->setIcon(QIcon(":/images/find.png"));
@@ -298,10 +295,10 @@ MainWindow::createActions()
 
   recalculateAction = new QAction(tr("&Recalculate"), this);
   recalculateAction->setShortcut(tr("F9"));
-  recalculateAction->setStatusTip(tr("Recalculate all the spreadsheet's formulas"));
+  recalculateAction->setStatusTip(tr("Recalculate all the spreadSheet's formulas"));
                                      
   connect(recalculateAction, SIGNAL(triggered()),
-          spreadsheet, SLOT(recalculate()));
+          spreadSheet, SLOT(recalculate()));
 
   sortAction = new QAction(tr("&Sort..."), this);
   sortAction->setStatusTip(tr("Sort the selected cells or all the cells"));
@@ -310,17 +307,17 @@ MainWindow::createActions()
 
   showGridAction = new QAction(tr("&Show Grid"), this);
   showGridAction->setCheckable(true);
-  showGridAction->setChecked(spreadsheet->showGrid());
-  showGridAction->setStatusTip(tr("Show or hide the spreadsheet's grid"));
+  showGridAction->setChecked(spreadSheet->showGrid());
+  showGridAction->setStatusTip(tr("Show or hide the spreadSheet's grid"));
   connect(showGridAction, SIGNAL(toggled(bool)),
-          spreadsheet, SLOT(setShowGrid(bool)));
+          spreadSheet, SLOT(setShowGrid(bool)));
 
   autoRecalcAction = new QAction(tr("&Auto-Recalculate"), this);
   autoRecalcAction->setCheckable(true);
-  autoRecalcAction->setChecked(spreadsheet->autoRecalculate());
+  autoRecalcAction->setChecked(spreadSheet->autoRecalculate());
   autoRecalcAction->setStatusTip(tr("Switch auto-recalculation on or off"));
   connect(autoRecalcAction, SIGNAL(toggled(bool)),
-          spreadsheet, SLOT(setAutoRecalculate(bool)));
+          spreadSheet, SLOT(setAutoRecalculate(bool)));
 
   aboutAction = new QAction(tr("&About"), this);
   aboutAction->setStatusTip(tr("Show the application's About box"));
@@ -340,9 +337,12 @@ MainWindow::createMenus()
     fileMenu->addAction(openAction);
     fileMenu->addAction(saveAction);
     fileMenu->addAction(saveAsAction);
+
     separatorAction = fileMenu->addSeparator();
+
     for (int i = 0; i < MaxRecentFiles; ++i)
         fileMenu->addAction(recentFileActions[i]);
+
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
@@ -380,17 +380,17 @@ MainWindow::createMenus()
 void
 MainWindow::createContextMenu()
 {
-  spreadsheet->addAction(cutAction);
-  spreadsheet->addAction(copyAction);
-  spreadsheet->addAction(pasteAction);
-  spreadsheet->setContextMenuPolicy(Qt::ActionsContextMenu);
+  spreadSheet->addAction(cutAction);
+  spreadSheet->addAction(copyAction);
+  spreadSheet->addAction(pasteAction);
+  spreadSheet->setContextMenuPolicy(Qt::ActionsContextMenu);
 }
 
 
 void
 MainWindow::createToolBars()
 {
-  fileToolBar = addToolbar(tr("&File"));
+  fileToolBar = addToolBar(tr("&File"));
   fileToolBar->addAction(newAction);
   fileToolBar->addAction(openAction);
   fileToolBar->addAction(saveAction);
@@ -417,8 +417,8 @@ MainWindow:: createStatusBar()
   statusBar()->addWidget(locationLabel);
   statusBar()->addWidget(formulaLabel, 1);
 
-  connect(spreadsheet, SIGNAL(currentCellChanged(int, int, int, int)), this, SLOT(updateStatusBar()));
-  connect(spreadsheet, SIGNAL(modified()), this, SLOT(spreadsheetModified()));
+  connect(spreadSheet, SIGNAL(currentCellChanged(int, int, int, int)), this, SLOT(updateStatusBar()));
+  connect(spreadSheet, SIGNAL(modified()), this, SLOT(spreadSheetModified()));
 
   updateStatusBar();
 }
@@ -427,7 +427,7 @@ MainWindow:: createStatusBar()
 void
 MainWindow::readSettings()
 {
-  QSettings settings("Software Inc.", "Spreadsheet");
+  QSettings settings("Software Inc.", "SpreadSheet");
 
   QRect rect = settings.value("geometry", QRect(200, 200, 400, 400)).toRect();
 
@@ -448,18 +448,18 @@ MainWindow::readSettings()
 void
 MainWindow::writeSettings()
 {
-  QSettings settings("Software Inc.", "Spreadsheet");
+  QSettings settings("Software Inc.", "SpreadSheet");
 
   settings.setValue("geometry",    geometry());
   settings.setValue("recentFiles", recentFiles);
   settings.setValue("showGrid",    showGridAction->isChecked());
-  settings.setValue("autoRecalc",  autoRecalcAction->isChecked);
+  settings.setValue("autoRecalc",  autoRecalcAction->isChecked());
 }
 
 bool
 MainWindow::okToContinue()
 {
-  if (modified) {
+  if (isWindowModified()) {
     int ret = QMessageBox::warning(this, 
                                    tr("SpreadSheet"),
                                    tr("The document has been modified.\nDo you want to save your changes?"),
@@ -481,7 +481,7 @@ MainWindow::okToContinue()
 bool
 MainWindow::loadFile(const QString &fileName)
 {
-  if (!spreadsheet->readFile(fileName)) {
+  if (!spreadSheet->readFile(fileName)) {
     statusBar()->showMessage(tr("Loading canceled"), 2000);
     return false;
   }
@@ -491,10 +491,10 @@ MainWindow::loadFile(const QString &fileName)
   return true;
 }
 
-void
+bool
 MainWindow::saveFile(const QString &fileName)
 {
-  if (!spreadsheet->writeFile(fileName)) {
+  if (!spreadSheet->writeFile(fileName)) {
     statusBar()->showMessage(tr("Saving canceled"), 2000);
     return false;
   }
@@ -518,7 +518,7 @@ MainWindow::setCurrentFile(const QString &fileName)
     updateRecentFileActions();
   }
 
-  setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("Spreadsheet")));
+  setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("SpreadSheet")));
 }
 
 void

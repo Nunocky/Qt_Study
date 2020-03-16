@@ -16,7 +16,7 @@ Cell::clone() const
 void
 Cell::setData(int role, const QVariant &value)
 {
-  QtableWidgetItem::setData(role, value);
+  QTableWidgetItem::setData(role, value);
   if (role == Qt::EditRole) {
     setDirty();
   }
@@ -34,7 +34,7 @@ Cell::data(int role) const
     }
   }
   else if (role == Qt::TextAlignmentRole) {
-    if (value().tpye() == QVariant::String) {
+    if (value().type() == QVariant::String) {
       return int(Qt::AlignLeft | Qt::AlignVCenter);
     }
     else {
@@ -73,10 +73,10 @@ Cell::value() const
     cacheIsDirty = false;
 
     QString formulaStr = formula();
-    if (formulaStr.startWith('\'')) {
+    if (formulaStr.startsWith('\'')) {
       cachedValue = formulaStr.mid(1);
     }
-    else if (formulaStr.startWith('=')) {
+    else if (formulaStr.startsWith('=')) {
       cachedValue = Invalid;
       QString expr = formulaStr.mid(1);
       expr.replace(" ", "");
@@ -103,7 +103,7 @@ Cell::value() const
 }
 
 QVariant
-Cell::evalExpression(const Qstring &str, int &pos) const
+Cell::evalExpression(const QString &str, int &pos) const
 {
   QVariant result = evalTerm(str, pos);
   while (str[pos] != QChar::Null) {

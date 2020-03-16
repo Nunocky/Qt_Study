@@ -16,9 +16,8 @@ INCLUDEPATH += .
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # Input
-HEADERS += finddialog.h gotocelldialog.h mainwindow.h sortdialog.h
+HEADERS += finddialog.h gotocelldialog.h mainwindow.h sortdialog.h spreadsheet.h cell.h
 FORMS += gotocelldialog.ui sortdialog.ui
-SOURCES += finddialog.cc gotocelldialog.cc mainwindow.cc sortdialog.cc
+SOURCES += finddialog.cc gotocelldialog.cc mainwindow.cc sortdialog.cc spreadsheet.cc cell.cc main.cc
 
-QT += widgets
 RESOURCES = spreadsheet.qrc
